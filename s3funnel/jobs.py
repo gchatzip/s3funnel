@@ -213,11 +213,13 @@ class CopyJob(Job):
         self.source_bucket = config.get('source_bucket')
         self.failed = failed
         self.retries = config.get('retry', 5)
+        self.preserve_acl = config.get('copy_preserve_acl')
+        self.encrypt_key = config.get('copy_encrypt')
         
     def _do(self, toolbox):
         for i in xrange(self.retries):
             try:
-                k = toolbox.get_bucket(self.bucket).copy_key(self.dest_key, self.source_bucket, self.key)
+                k = toolbox.get_bucket(self.bucket).copy_key(self.dest_key, self.source_bucket, self.key, preserve_acl=self.preserve_acl, encrypt_key=self.encrypt_key)
                 log.info("Copied: %s to %s" % (self.key, self.dest_key))
                 return
             except S3ResponseError, e:

@@ -79,6 +79,9 @@ def main():
     parser.add_option("-i", "--input",      dest="input", type="string", metavar="FILE", help="Read one file per line from a FILE manifest")
     parser.add_option("-v", "--verbose",    dest="verbose", action="count", default=None, help="Enable verbose output. Use twice to enable debug output")
     parser.add_option("--version",          dest="version", action="store_true", help="Output version information and exit")
+    parser.add_option("--copy-encrypt",           dest="copy_encrypt", action="store_false", help="(`copy`only) Encrypt destination objects on copy")
+    parser.add_option("--copy-preserve-acl",      dest="copy_preserve_acl", action="store_false", help="(`copy`only) Preserve ACLs on copy")
+
 
     # Deprecated options (for backwards compatibility)
     parser.add_option("--start_key",        dest="list_marker", type="string", default=None, help=SUPPRESS_HELP)
@@ -173,7 +176,9 @@ def main():
               'del_prefix': options.del_prefix,
               'headers': headers,
               'numthreads': options.numthreads,
-              'ignore_s3fs_dirs': options.ignore_s3fs_dirs
+              'ignore_s3fs_dirs': options.ignore_s3fs_dirs,
+              'copy_encrypt' : options.copy_encrypt,
+              'copy_preserve_acl' : options.copy_preserve_acl
               }
 
     funnel = S3Funnel(**config)
